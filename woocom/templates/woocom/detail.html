@@ -7,6 +7,18 @@
     
     <a href="/">Home</a><br><br>
     
+     <table style="border-collapse: collapse;">
+      
+        <tr style="border-bottom:1px solid black;">
+          <td>
+            {% for pic in instant.images %} 
+              <img height="150px" src="{{ pic.src }}">
+            {% endfor %}
+
+          </td>
+        </tr>
+      </table>
+    
     <form action="" method="POST">
         {% csrf_token %}
         
@@ -22,9 +34,65 @@
         <b>Short description:</b><br>
         {{ instant.short_description }}<br>
         <textarea name="short_description" placeholder="Enter new short description"></textarea>
-    
-    <p><input type="submit"></p>
+        <br>
+        <p><input type="submit" value="Обновить описание"></p>
     </form>
+    <br><br>
+    
+   
+        
+        Варианты: {{ options |length}} шт<br>
+              
+                {% for all_var in options %}
+                 <form action="" method="POST">
+                    {% csrf_token %}
+
+                    Option:                    
+                    
+                    {% for name in all_var.attributes|slice:":1" %}
+                        {{ name.name }} {{ name.option }} ({{all_var.id}})
+                    {% endfor %}
+                    
+                    
+                    <br>
+                    Price: {{ all_var.price }}<br>
+                    Regular price: {{ all_var.regular_price }}  
+                      
+                      {% if all_var.regular_price %}
+                          <input type="number" name="regular_price">
+
+                      {% endif %}
+                    
+                    <br>
+                          
+                    Sale price: {{all_var.sale_price }} <br>
+                    
+                    {% if all_var.sale_price %}
+                          <input type="number" name="sale_price">
+                          
+                    {% endif %}
+                    
+                    Старт акции: {{all_var.date_on_sale_from }} <br>
+                   
+                    Срок акции: {{all_var.date_on_sale_to}} <br>
+                   
+                    
+                    {% if all_var.stock_status == 'onbackorder' %}
+                        Предзаказ 
+                    {% elif all_var.stock_status == 'instock' %}
+                        В Наличии
+                    {% else %}
+                        Не доступен
+                    {% endif %}
+                    
+                    <input type="hidden" value="{{all_var.id}}" name="v_id">
+                    <p><input type="submit" value="Обновить цены"></p><br><br>
+                </form>
+                {% endfor %}
+                
+    
+    
+    
     
   
 </body>

@@ -76,7 +76,12 @@ def detail(request, d_id):
         description = request.POST.get('description')
         short_description = request.POST.get('short_description')
         
+        regular_price = request.POST.get('regular_price')
+        sale_price = request.POST.get('sale_price')
+        v_id = request.POST.get('v_id')
+        
         data = {}
+        
         
         if name:
             data['name'] = name
@@ -88,6 +93,16 @@ def detail(request, d_id):
         
         if data:
             r = wcapi.put(f"products/{d_id}", data).json()
+        
+        data_price = {}
+        
+        if regular_price:
+            data_price['regular_price'] = regular_price
+        if sale_price:
+            data_price['sale_price'] = sale_price
+        
+        if data_price:
+            r = wcapi.put(f"products/{d_id}/variations/{v_id}", data_price).json()
 
     
     instant = wcapi.get(f"products/{d_id}").json()
