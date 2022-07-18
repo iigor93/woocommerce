@@ -1,0 +1,125 @@
+<html>
+<head>
+  <title>List</title>
+</head>
+
+<body>
+  <p>Hello {{ user }}</p>
+  
+  {% if data %}
+    <table style="border-collapse: collapse;">
+      <tr style="border-bottom:1px solid black;">
+        <th>Pic</th>
+        <th>Name</th>
+        <th>Categories</th>
+        <th>Short Description</th>
+        <th>Attributes</th>
+        <th width="23%" >Options</th>
+      </tr>
+      
+     {% for item in data %} 
+        <tr style="border-bottom:1px solid black;">
+          <td>
+            {% for pic in item.images|slice:":1" %} 
+              <img height="150px" src="{{ pic.src }}">
+            {% endfor %}
+
+          </td>
+          <td><a href="/{{ item.id }}/">{{ item.name }}</a>
+              
+               <br> 
+              Price: {{ item.price }}
+              Regular: {{ item.regular_price }} <br>
+              Sales: {{item.sale_price }}
+          
+          
+          
+          </td>
+          <td>
+            {% for pic in item.categories %} 
+              {{ pic.name }};&nbsp
+            {% endfor %}
+           
+          </td>
+          
+          <td>
+              {{ item.short_description }}
+          
+          </td>
+          
+          
+          <td>
+            {% for attr in item.attributes %} 
+              {{attr.name}}:&nbsp[
+                {% for option in attr.options %} 
+                  {{option}};&nbsp
+                {% endfor %}
+                ]
+            {% endfor %}
+            
+          </td>
+          
+          <td>
+              Variations: {{ item.variations |length}} pcs<br>
+              {% for vari in item.variations %}
+                {% for all_var in all_variations %}
+                  
+                  {% if vari == all_var.id %}
+                    
+                    Option: {{ all_var.option }} <br>[
+                    Price: {{ all_var.price }}<br>
+                    Regular price: {{ all_var.regular_price }}  <br>
+                    Sale price: {{all_var.sale_price }} <br>
+                    
+                    Старт акции: {{all_var.date_on_sale_from }} <br>
+                   
+                    Срок акции: {{all_var.date_on_sale_to}} <br>
+                   
+                    
+                    {% if all_var.stock_status == 'onbackorder' %}
+                        Предзаказ]<br><br> 
+                    {% elif all_var.stock_status == 'instock' %}
+                        В Наличии]<br><br> 
+                    {% else %}
+                        Не доступен]<br><br> 
+                    {% endif %}
+                        
+    
+                  {% endif %}
+                
+                
+                {% endfor %}
+                
+                
+              {% endfor %}
+            
+          </td>
+          
+        </tr>
+      {% endfor %}
+    
+    </table>
+
+    
+  {% else %}
+    <p>No items are available.</p>
+  {% endif %}
+  
+  
+  {% if total_pages %}
+    {% for item in total_pages %}
+      {% if page == forloop.counter|stringformat:"s" %}
+        {{ item }} &nbsp &nbsp &nbsp
+      
+      {% elif page == forloop.counter %}
+        {{ item }} &nbsp &nbsp &nbsp
+        
+        
+      {% else %}
+        <a href="/?page={{ item }}" >{{ item }}</a> &nbsp &nbsp &nbsp
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  
+</body>
+</html>

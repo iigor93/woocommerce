@@ -1,0 +1,31 @@
+<html>
+<head>
+  <title>Detail</title>
+</head>
+
+<body>
+    
+    <a href="/">Home</a><br><br>
+    
+    <form action="" method="POST">
+        {% csrf_token %}
+        
+        <b>Name:</b> {{ instant.name }}<br>
+        <textarea name="name" placeholder="Enter new name"></textarea>
+        <br><br>
+        
+        <b>Description:</b><br>
+        {{ instant.description }}<br>
+        <textarea name="description" placeholder="Enter new description"></textarea>
+        <br><br>
+        
+        <b>Short description:</b><br>
+        {{ instant.short_description }}<br>
+        <textarea name="short_description" placeholder="Enter new short description"></textarea>
+    
+    <p><input type="submit"></p>
+    </form>
+    
+  
+</body>
+</html>
