@@ -197,7 +197,137 @@
               
               <div class="u-container-style u-layout-cell u-size-15 u-size-30-md u-layout-cell-4">
                 <div class="u-container-layout u-container-layout-4">
-                  <p class="u-text u-text-default u-text-5">title:<br> {{ item.yoast_head_json.title }}<br><br>Description: <br>{{ item.yoast_head_json.description }}</p>
+                    
+                  <p class="u-text u-text-default u-text-5">
+                  Title:
+                  </p>
+                  
+                  <p class="u-text u-text-default u-text-5"
+                      id="title{{item.id}}" style="display:block"
+                      onclick=
+                            "document.getElementById('title_textarea_p{{item.id}}').style.display='block'; 
+                            document.getElementById('title{{item.id}}').style.display='none'; 
+                            
+                            document.getElementById('title_cancel_{{item.id}}').style.display='block';
+                            document.getElementById('title_save_{{item.id}}').style.display='block';
+                            document.getElementById('title_textarea{{item.id}}').value=document.getElementById('title{{item.id}}').textContent.replaceAll('\n', '')
+                            
+                      "
+                      
+                      >
+                        
+                        {% for yoast in item.meta_data %}
+                            {% if yoast.key == '_yoast_wpseo_title' %}
+                                {{ yoast.value | striptags }}
+                            {% endif %}
+                        {% endfor %}
+                        
+                  </p>
+                  
+                  <p class="u-text u-text-default u-text-5" id="title_textarea_p{{item.id}}" style="display:none;">
+                    <textarea style="min-height: 260px; overflow-y: auto; word-wrap:break-word" 
+                    id="title_textarea{{item.id}}" name="title_textarea" form="short_form_{{item.id}}"></textarea>
+                      {% for yoast in item.meta_data %}
+                            {% if yoast.key == '_yoast_wpseo_title' %}
+                               <input type="hidden" name="yoast_title" value="{{yoast.id}}" form="short_form_{{item.id}}">
+                            {% endif %}
+                        {% endfor %}
+                    
+                  </p>
+                  
+                  
+                  <button id="title_save_{{item.id}}" 
+                  onclick="
+                        document.getElementById('title{{item.id}}').style.display='block'; 
+                        document.getElementById('title_textarea_p{{item.id}}').style.display='none'; 
+                        document.getElementById('title_cancel_{{item.id}}').style.display='none'; 
+                        document.getElementById('title_save_{{item.id}}').style.display='none'; 
+                        document.getElementById('not_saved_{{item.id}}').style.display='block'; 
+                        document.getElementById('title{{item.id}}').textContent=document.getElementById('title_textarea{{item.id}}').value
+                        "
+                  
+                  style="display:none;">Сохранить
+                  </button>
+                  
+                  <button id="title_cancel_{{item.id}}" 
+                    onclick="
+                        document.getElementById('title{{item.id}}').style.display='block'; 
+                        document.getElementById('title_textarea_p{{item.id}}').style.display='none'; 
+                        
+                        document.getElementById('title_cancel_{{item.id}}').style.display='none'; 
+                        document.getElementById('title_save_{{item.id}}').style.display='none'; 
+                        document.getElementById('title_textarea{{item.id}}').value='';
+                        document.getElementById('not_saved_{{item.id}}').style.display='none'; 
+                    "
+                    style="display:none;">Отмена
+                  </button>
+                  
+                  <br>
+                  <p class="u-text u-text-default u-text-5">
+                  Description:
+                  </p>
+                  
+                  <p class="u-text u-text-default u-text-5"
+                      id="title_d{{item.id}}" style="display:block"
+                      onclick=
+                            "document.getElementById('title_d_textarea_p{{item.id}}').style.display='block'; 
+                            document.getElementById('title_d{{item.id}}').style.display='none'; 
+                            
+                            document.getElementById('title_d_cancel_{{item.id}}').style.display='block';
+                            document.getElementById('title_d_save_{{item.id}}').style.display='block';
+                            document.getElementById('title_d_textarea{{item.id}}').value=document.getElementById('title_d{{item.id}}').textContent.replaceAll('\n', '')
+                            
+                      "
+                      
+                      >
+                        {% for yoast in item.meta_data %}
+                            {% if yoast.key == '_yoast_wpseo_metadesc' %}
+                                {{ yoast.value | striptags  }}
+                            {% endif %}
+                        {% endfor %}
+                        
+                  </p>
+                  
+                  <p class="u-text u-text-default u-text-5" id="title_d_textarea_p{{item.id}}" style="display:none;">
+                    <textarea style="min-height: 260px; overflow-y: auto; word-wrap:break-word" 
+                    id="title_d_textarea{{item.id}}" name="title_d_textarea" form="short_form_{{item.id}}"></textarea>
+                    
+                    {% for yoast in item.meta_data %}
+                            {% if yoast.key == '_yoast_wpseo_metadesc' %}
+                               <input type="hidden" name="yoast_description" value="{{yoast.id}}" form="short_form_{{item.id}}">
+                            {% endif %}
+                        {% endfor %}
+                  </p>
+                  
+                  
+                  <button id="title_d_save_{{item.id}}" 
+                  onclick="
+                        document.getElementById('title_d{{item.id}}').style.display='block'; 
+                        document.getElementById('title_d_textarea_p{{item.id}}').style.display='none'; 
+                        document.getElementById('title_d_cancel_{{item.id}}').style.display='none'; 
+                        document.getElementById('title_d_save_{{item.id}}').style.display='none'; 
+                        document.getElementById('not_saved_{{item.id}}').style.display='block'; 
+                        document.getElementById('title_d{{item.id}}').textContent=document.getElementById('title_d_textarea{{item.id}}').value
+                        "
+                  
+                  style="display:none;">Сохранить
+                  </button>
+                  
+                  <button id="title_d_cancel_{{item.id}}" 
+                    onclick="
+                        document.getElementById('title_d{{item.id}}').style.display='block'; 
+                        document.getElementById('title_d_textarea_p{{item.id}}').style.display='none'; 
+                        
+                        document.getElementById('title_d_cancel_{{item.id}}').style.display='none'; 
+                        document.getElementById('title_d_save_{{item.id}}').style.display='none'; 
+                        document.getElementById('title_d_textarea{{item.id}}').value='';
+                        document.getElementById('not_saved_{{item.id}}').style.display='none'; 
+                    "
+                    style="display:none;">Отмена
+                  </button>
+                  
+                  
+                  
                 </div>
               </div>
             {% endfor %}

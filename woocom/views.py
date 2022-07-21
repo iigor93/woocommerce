@@ -1,9 +1,6 @@
 from django.shortcuts import render
-import datetime
 import asyncio
 import aiohttp
-import time
-from django.http import HttpResponse
 from woocom.config import wcapi
 
 
@@ -23,26 +20,48 @@ def main(request):
         description = request.POST.get('name_desc')
         short_description = request.POST.get('name_shor_desc')
         
-        data = {}
+        title = request.POST.get('title_textarea').strip()
+        title_description = request.POST.get('title_d_textarea').strip()
+        
+        description_id = request.POST.get('yoast_description')
+        title_id = request.POST.get('yoast_title')
         
         
-        
+        data_save = {}
+
         if description:
-            data['description'] = description
+            data_save['description'] = description
         if short_description:
-            data['short_description'] = short_description
+            data_save['short_description'] = short_description
             
-        if data:
             
-            r = wcapi.put(f"products/{v_id}", data).json()
+        meta_data = []
+            
+        if title:
+            meta_data.append({'id': title_id, 'key': '_yoast_wpseo_title', 'value': title})
         
-    
+        if title_description:
+            meta_data.append({'id': description_id, 'key': '_yoast_wpseo_metadesc', 'value': title_description})
+            
+            
+            
+        if title_description:
+            data_save['title_description'] = title_description
+        if description_id:
+            data_save['description_id'] = description_id
+        if meta_data:
+            data_save['meta_data'] = meta_data
+        
+            
+        if data_save:
+            
+            r = wcapi.put(f"products/{v_id}", data_save).json()
+
     page = 1 if request.GET.get('page') is None else request.GET.get('page')
     
     raw_data = wcapi.get("products", params={"per_page": 10, "page": int(page)})
     
     data = raw_data.json()
-    
     
     all_variations = []
     all_variation_attr = []
@@ -57,9 +76,8 @@ def main(request):
             
         for item2 in background_tasks:
             await item2
-            
-            
-    #asyncio.run(func_main(data, all_variations))
+
+    # asyncio.run(func_main(data, all_variations))
     
     for all_item in all_variations:    
         for item in all_item:
@@ -76,8 +94,7 @@ def main(request):
             temp_dict['date_on_sale_from'] = item.get('date_on_sale_from')[:10] if item.get('date_on_sale_from') else None
             
             temp_dict['date_on_sale_to'] = item.get('date_on_sale_to')[:10] if item.get('date_on_sale_to') else None
-           
-            
+
             all_variation_attr.append(temp_dict)
             
     headers = raw_data.headers
@@ -88,8 +105,7 @@ def main(request):
         total_pages = int(total_pages) + 1
     except (ValueError, TypeError):
         print('err int')
-        
-    
+
     context = {'user': 'igor', 'data': data, 'total_pages': range(1, total_pages), 'page': page, 'all_variations': all_variation_attr}
     return render(request, 'woocom/Main.html', context)
 
@@ -118,7 +134,6 @@ def detail(request, d_id):
         sale_cancel = request.POST.get('sale_cancel')
         
         data = {}
-        
         
         if name:
             data['name'] = name
@@ -152,12 +167,10 @@ def detail(request, d_id):
             data_price['date_on_sale_to'] = ""
             data_price['date_on_sale_from_gmt'] = ""
             data_price['date_on_sale_to_gmt'] = ""
-        
-        
+
         if data_price:
             r = wcapi.put(f"products/{d_id}/variations/{v_id}", data_price).json()
 
-    
     instant = wcapi.get(f"products/{d_id}").json()
     options = wcapi.get(f"products/{d_id}/variations").json()
     
