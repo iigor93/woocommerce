@@ -10,7 +10,6 @@
     <table style="border-collapse: collapse;">
       <tr style="border-bottom:1px solid black;">
         <th>Pic</th>
-        <th>Name</th>
         <th>Categories</th>
         <th>Short Description</th>
         <th>Attributes</th>
@@ -24,8 +23,8 @@
               <img height="150px" src="{{ pic.src }}">
             {% endfor %}
 
-          </td>
-          <td><a href="/{{ item.id }}/">{{ item.name }}</a>
+          <br>
+          <a href="/{{ item.id }}/">{{ item.name }}</a>
               
                <br> 
               Price: {{ item.price }}

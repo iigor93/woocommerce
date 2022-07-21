@@ -1,23 +1,48 @@
 from django.shortcuts import render
+import datetime
 import asyncio
+import aiohttp
 import time
 from django.http import HttpResponse
 from woocom.config import wcapi
 
+
 async def request_to_site(id_, all_variations):
-    r = wcapi.get(f"products/{id_}/variations").json()
-    all_variations.append(r)
+    async with aiohttp.ClientSession(auth=aiohttp.BasicAuth(wcapi.consumer_key, wcapi.consumer_secret)) as session:
+        async with session.get(f"https://studio-oreol.ru/wp-json/wc/v3/products/{id_}/variations") as resp:
+            
+            all_variations.append(await resp.json())
     
     return all_variations
 
 
 def main(request):
     
+    if request.method == 'POST':
+        v_id = request.POST.get('short_desc_id')
+        description = request.POST.get('name_desc')
+        short_description = request.POST.get('name_shor_desc')
+        
+        data = {}
+        
+        
+        
+        if description:
+            data['description'] = description
+        if short_description:
+            data['short_description'] = short_description
+            
+        if data:
+            
+            r = wcapi.put(f"products/{v_id}", data).json()
+        
+    
     page = 1 if request.GET.get('page') is None else request.GET.get('page')
     
     raw_data = wcapi.get("products", params={"per_page": 10, "page": int(page)})
     
     data = raw_data.json()
+    
     
     all_variations = []
     all_variation_attr = []
@@ -66,7 +91,7 @@ def main(request):
         
     
     context = {'user': 'igor', 'data': data, 'total_pages': range(1, total_pages), 'page': page, 'all_variations': all_variation_attr}
-    return render(request, 'woocom/index.html', context)
+    return render(request, 'woocom/Main.html', context)
 
 
 def detail(request, d_id):
@@ -80,6 +105,18 @@ def detail(request, d_id):
         sale_price = request.POST.get('sale_price')
         v_id = request.POST.get('v_id')
         
+        stock = request.POST.get('stock')
+        
+        date_on_sale_from = request.POST.get('date_on_sale_from')
+        if date_on_sale_from:
+            date_on_sale_from += ' 00:00:00'
+        
+        date_on_sale_to = request.POST.get('date_on_sale_to')
+        if date_on_sale_to:
+            date_on_sale_to += ' 23:59:59'
+        
+        sale_cancel = request.POST.get('sale_cancel')
+        
         data = {}
         
         
@@ -89,8 +126,7 @@ def detail(request, d_id):
             data['description'] = description
         if short_description:
             data['short_description'] = short_description
-        
-        
+  
         if data:
             r = wcapi.put(f"products/{d_id}", data).json()
         
@@ -100,6 +136,23 @@ def detail(request, d_id):
             data_price['regular_price'] = regular_price
         if sale_price:
             data_price['sale_price'] = sale_price
+        if date_on_sale_from:
+            data_price['date_on_sale_from'] = date_on_sale_from
+        if date_on_sale_to:
+            data_price['date_on_sale_to'] = date_on_sale_to
+            
+        if stock == 'instock':
+            data_price['stock_status'] = 'instock'
+        if stock == 'onbackorder':
+            data_price['stock_status'] = 'onbackorder'
+        
+        if sale_cancel == 'true':
+            data_price['sale_price'] = ""
+            data_price['date_on_sale_from'] = ""
+            data_price['date_on_sale_to'] = ""
+            data_price['date_on_sale_from_gmt'] = ""
+            data_price['date_on_sale_to_gmt'] = ""
+        
         
         if data_price:
             r = wcapi.put(f"products/{d_id}/variations/{v_id}", data_price).json()

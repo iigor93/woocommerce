@@ -18,12 +18,28 @@
           </td>
         </tr>
       </table>
+      <br><br>
     
-    <form action="" method="POST">
-        {% csrf_token %}
+    
         
         <b>Name:</b> {{ instant.name }}<br>
-        <textarea name="name" placeholder="Enter new name"></textarea>
+        
+        <div id="example_2" style="display:none;">
+           <textarea name="name" form="first_form" placeholder="Enter new name"></textarea>
+        </div>
+
+        <button id="example_2_1" onclick=
+        "document.getElementById('example_2').style.display='block'; 
+        document.getElementById('example_2_1').style.display='none'; 
+        document.getElementById('example_2_2').style.display='block';" >Изменить</button>
+
+        <button id="example_2_2" onclick="
+        document.getElementById('example_2').style.display='none'; 
+        document.getElementById('example_2_2').style.display='none'; 
+        document.getElementById('example_2_1').style.display='block';" style="display:none;">Скрыть</button>
+        
+       <form action="" method="POST" id="first_form">
+        {% csrf_token %} 
         <br><br>
         
         <b>Description:</b><br>
@@ -57,37 +73,52 @@
                     <br>
                     Price: {{ all_var.price }}<br>
                     Regular price: {{ all_var.regular_price }}  <br>
-                      
-                      {% if all_var.regular_price %}
-                          <input type="number" name="regular_price"> <br>
+                    <input type="number" name="regular_price"> <br>
 
-                      {% endif %}
-                    
+                   
 
                           
                     Sale price: {{all_var.sale_price }} <br>
+                    <input type="number" name="sale_price"> <br>
                     
-                    {% if all_var.sale_price %}
-                          <input type="number" name="sale_price"> <br>
-                          
-                    {% endif %}
                     
                     Старт акции: {{all_var.date_on_sale_from }} <br>
+                          <input type="date" name="date_on_sale_from"> <br>
                    
                     Срок акции: {{all_var.date_on_sale_to}} <br>
-                   
+                          <input type="date" name="date_on_sale_to"> <br>
+                          
+                          <p>{% if all_var.stock_status == 'onbackorder' %}
+                                      Предзаказ
+                             {% elif all_var.stock_status == 'instock' %}
+                                      В наличии
+                              {% endif %}</p>
+                              
+                          <p>
+                          <select name="stock">
+                              <option value="choose">Choose</option>
+                              <option value="onbackorder">Предзаказ</option>
+                              <option value="instock">В наличии</option>
+                          
+                          
+                          </select>
+                          </p>
                     
-                    {% if all_var.stock_status == 'onbackorder' %}
-                        Предзаказ 
-                    {% elif all_var.stock_status == 'instock' %}
-                        В Наличии
-                    {% else %}
-                        Не доступен
-                    {% endif %}
                     
                     <input type="hidden" value="{{all_var.id}}" name="v_id">
-                    <p><input type="submit" value="Обновить цены"></p><br><br>
+                    <p><input type="submit" value="Обновить цены"></p>
+                    
                 </form>
+                
+                
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    
+                    <input type="hidden" value="{{all_var.id}}" name="v_id">
+                    <input type="hidden" value="true" name="sale_cancel">
+                    <p><input type="submit" value="Удалить акцию"></p>
+                </form>
+                <br><br>
                 {% endfor %}
                 
     

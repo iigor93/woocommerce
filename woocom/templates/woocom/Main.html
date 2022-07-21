@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html style="font-size: 16px;" lang="ru"><head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title>Main</title>
+    <link rel="stylesheet" href="media/static_files/nicepage.css" media="screen">
+   
+    <link rel="stylesheet" href="media/static_files/Main.css" media="screen">
+    
+    <script class="u-script" type="text/javascript" src="media/static_files/nicepage.js" defer=""></script>
+    
+    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+    
+    
+    <script type="application/ld+json">{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"name": "",
+		"logo": "media/images/default-logo.png"
+}</script>
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="Main">
+    <meta property="og:type" content="website">
+  </head>
+  <body class="u-body u-xl-mode" data-lang="ru"><header class="u-clearfix u-header u-header" id="sec-fa87"><div class="u-clearfix u-sheet u-sheet-1">
+        <p class="u-align-center u-text u-text-default u-text-1">Studio Oreol<br>Woocommerce<br>
+        </p>
+        <a href="/" class="u-image u-logo u-image-1">
+          <img src="media/images/default-logo.png" class="u-logo-image u-logo-image-1">
+        </a>
+        
+          
+         
+            </div>
+            <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
+          </div>
+        </nav>
+      </div></header>
+      
+      
+    
+    
+    <section class="u-clearfix u-section-1" id="sec-0254">
+      <div class="u-align-left u-clearfix u-sheet u-sheet-1">
+        <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
+          <div class="u-layout">
+            <div class="u-layout-row">
+                {% if data %}
+                
+            <div class="u-container-style u-layout-cell u-size-12-lg u-size-12-xl u-size-14-sm u-size-14-xs u-size-30-md u-layout-cell-1">
+                <div class="u-container-layout u-container-layout-1">
+                  <p class="u-text u-text-3"><b>Название</b></p>
+                </div>
+            </div>
+            <div class="u-container-style u-layout-cell u-size-16-sm u-size-16-xs u-size-18-lg u-size-18-xl u-size-30-md u-layout-cell-2">
+                <div class="u-container-layout u-container-layout-2">
+                  <p class="u-text u-text-3"><b>Краткое описание</b></p>
+                </div>
+            </div>
+            <div class="u-container-style u-layout-cell u-size-15 u-size-30-md u-layout-cell-3">
+                <div class="u-container-layout u-container-layout-3">
+                  <p class="u-text u-text-3"><b>Поное описание</b></p>
+                </div>
+            </div>
+            <div class="u-container-style u-layout-cell u-size-15 u-size-30-md u-layout-cell-4">
+                <div class="u-container-layout u-container-layout-4">
+                  <p class="u-text u-text-3"><b>title/meta desc</b></p>
+                </div>
+            </div>
+                
+                {% for item in data %} 
+              
+              <div class="u-container-style u-layout-cell u-size-12-lg u-size-12-xl u-size-14-sm u-size-14-xs u-size-30-md u-layout-cell-1">
+                <div class="u-container-layout u-container-layout-1">
+                  
+                  <img class="u-expanded-width u-image u-image-default u-image-1" 
+                    
+                    {% for pic in item.images|slice:':1' %} 
+                        src="{{ pic.src }}" 
+                    {% endfor %}
+                    
+                    
+                    
+                    alt="" data-image-width="500" data-image-height="333">
+                  <p class="u-align-center u-text u-text-1"><a href="/{{ item.id }}/">{{ item.name }}</a>
+                  </p>
+                  <p class="u-align-center u-text u-text-2">
+                        Price: {{ item.price }} <br>
+                        Regular: {{ item.regular_price }} <br>
+                        Sales: {{item.sale_price }}
+                  </p>
+                  <form action="" method="POST" id="short_form_{{item.id}}">
+                    {% csrf_token %}
+                    <p><input id="not_saved_{{item.id}}" type="submit" value="Обновить описание" style="display:none;"></p>
+                    <p><input type="hidden" name="short_desc_id" value="{{item.id}}"</p>
+                    </form>
+                </div>
+              </div>
+              
+              <div class="u-container-style u-layout-cell u-size-16-sm u-size-16-xs u-size-18-lg u-size-18-xl u-size-30-md u-layout-cell-2">
+                <div class="u-container-layout u-container-layout-2">
+                  <p class="u-text u-text-3"  id="short_desc_{{item.id}}" style="display:block"
+                  onclick=
+                        "document.getElementById('p_short_desc_{{item.id}}').style.display='block'; 
+                        document.getElementById('short_desc_{{item.id}}').style.display='none'; 
+                        document.getElementById('cancel_{{item.id}}').style.display='block';
+                        document.getElementById('save_{{item.id}}').style.display='block';
+                        document.getElementById('textarea_short_desc_{{item.id}}').value=document.getElementById('short_desc_{{item.id}}').textContent
+                        "
+                  >{{ item.short_description | striptags }}</p>
+                  
+                  <p class="u-text u-text-3" id="p_short_desc_{{item.id}}" style="display:none;">
+                    <textarea style="min-height: 260px; overflow-y: auto; word-wrap:break-word" 
+                    id="textarea_short_desc_{{item.id}}" name="name_shor_desc" form="short_form_{{item.id}}"></textarea>
+                  </p>
+                  
+                  <button id="save_{{item.id}}" 
+                  onclick="
+                  document.getElementById('short_desc_{{item.id}}').style.display='block'; 
+                        document.getElementById('p_short_desc_{{item.id}}').style.display='none'; 
+                        document.getElementById('cancel_{{item.id}}').style.display='none'; 
+                        document.getElementById('save_{{item.id}}').style.display='none'; 
+                        document.getElementById('not_saved_{{item.id}}').style.display='block'; 
+                        document.getElementById('short_desc_{{item.id}}').textContent=document.getElementById('textarea_short_desc_{{item.id}}').value
+                        "
+                  
+                  style="display:none;">Сохранить
+                  </button>
+                  
+                  <button id="cancel_{{item.id}}" 
+                    onclick="
+                        document.getElementById('short_desc_{{item.id}}').style.display='block'; 
+                        document.getElementById('p_short_desc_{{item.id}}').style.display='none'; 
+                        document.getElementById('cancel_{{item.id}}').style.display='none'; 
+                        document.getElementById('save_{{item.id}}').style.display='none'; 
+                        document.getElementById('textarea_short_desc_{{item.id}}').value='';
+                        document.getElementById('not_saved_{{item.id}}').style.display='none'; 
+                    "
+                    style="display:none;">Отмена
+                  </button>
+                  
+
+                  
+                </div>
+                
+                
+              </div>
+              <div class="u-container-style u-layout-cell u-size-15 u-size-30-md u-layout-cell-3">
+                <div class="u-container-layout u-container-layout-3">
+                  <p class="u-text u-text-default u-text-4"
+                  id="desc_{{item.id}}" style="display:block"
+                  onclick=
+                        "document.getElementById('p_desc_{{item.id}}').style.display='block'; 
+                        document.getElementById('desc_{{item.id}}').style.display='none'; 
+                        document.getElementById('d_cancel_{{item.id}}').style.display='block';
+                        document.getElementById('d_save_{{item.id}}').style.display='block';
+                        document.getElementById('textarea_desc_{{item.id}}').value=document.getElementById('desc_{{item.id}}').textContent
+                        
+                  ">
+                    {{ item.description | striptags }}</p>
+                    
+                 <p class="u-text u-text-default u-text-4" id="p_desc_{{item.id}}" style="display:none;">
+                    <textarea style="min-height: 260px; overflow-y: auto; word-wrap:break-word" 
+                    id="textarea_desc_{{item.id}}" name="name_desc" form="short_form_{{item.id}}"></textarea>
+                  </p>
+                    
+                <button id="d_save_{{item.id}}" 
+                  onclick="
+                  document.getElementById('desc_{{item.id}}').style.display='block'; 
+                        document.getElementById('p_desc_{{item.id}}').style.display='none'; 
+                        document.getElementById('d_cancel_{{item.id}}').style.display='none'; 
+                        document.getElementById('d_save_{{item.id}}').style.display='none'; 
+                        document.getElementById('not_saved_{{item.id}}').style.display='block'; 
+                        document.getElementById('desc_{{item.id}}').textContent=document.getElementById('textarea_desc_{{item.id}}').value
+                        "
+                  
+                  style="display:none;">Сохранить
+                  </button>
+                  
+                  <button id="d_cancel_{{item.id}}" 
+                    onclick="
+                        document.getElementById('desc_{{item.id}}').style.display='block'; 
+                        document.getElementById('p_desc_{{item.id}}').style.display='none'; 
+                        document.getElementById('d_cancel_{{item.id}}').style.display='none'; 
+                        document.getElementById('d_save_{{item.id}}').style.display='none'; 
+                        document.getElementById('textarea_desc_{{item.id}}').value='';
+                        document.getElementById('not_saved_{{item.id}}').style.display='none'; 
+                    "
+                    style="display:none;">Отмена
+                  </button>
+                    
+                </div>
+              </div>
+              
+              <div class="u-container-style u-layout-cell u-size-15 u-size-30-md u-layout-cell-4">
+                <div class="u-container-layout u-container-layout-4">
+                  <p class="u-text u-text-default u-text-5">title:<br> {{ item.yoast_head_json.title }}<br><br>Description: <br>{{ item.yoast_head_json.description }}</p>
+                </div>
+              </div>
+            {% endfor %}
+            {% endif %}     
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <div class="u-align-center u-clearfix">
+     {% if total_pages %}
+    {% for item in total_pages %}
+    
+      {% if page == forloop.counter|stringformat:"s" %}
+      <a  class="list_button_active">{{ item }}</a>&nbsp &nbsp &nbsp
+        
+      
+      {% elif page == forloop.counter %}
+      
+      <a  class="list_button_active">{{ item }}</a>&nbsp &nbsp &nbsp
+        
+        
+        
+      {% else %}
+        <a href="/?page={{ item }}" class="list_button">{{ item }}</a>&nbsp &nbsp &nbsp
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  </div>
+  <br>
+    
+    
+    <footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-a6df"><div class="u-clearfix u-sheet u-sheet-1">
+        <p class="u-small-text u-text u-text-variant u-text-1">Редактор товаров Woocommerce<br>
+        </p>
+      </div></footer>
+
+  
+</body></html>
