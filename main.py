@@ -2,6 +2,8 @@ from woocommerce import API
 import asyncio
 import aiohttp
 
+#new_branch
+
 
 wcapi = API(
     url="https://studio-oreol.ru",
