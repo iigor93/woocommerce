@@ -1,2 +1,3 @@
 Веб интерфейс/редактор для интернет магазина на Wordpress/Woocommerce
-pc branch
+
+Django 4.0.6
