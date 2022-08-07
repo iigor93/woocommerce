@@ -8,6 +8,7 @@ __pycache__/
 config.py
 woocom/config.py
 .idea
+requirements.txt
 
 # C extensions
 *.so

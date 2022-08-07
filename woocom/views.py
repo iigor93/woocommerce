@@ -25,16 +25,14 @@ def main(request):
         
         description_id = request.POST.get('yoast_description')
         title_id = request.POST.get('yoast_title')
-        
-        
+
         data_save = {}
 
         if description:
             data_save['description'] = description
         if short_description:
             data_save['short_description'] = short_description
-            
-            
+
         meta_data = []
             
         if title:
@@ -43,16 +41,13 @@ def main(request):
         if title_description:
             meta_data.append({'id': description_id, 'key': '_yoast_wpseo_metadesc', 'value': title_description})
             
-            
-            
         if title_description:
             data_save['title_description'] = title_description
         if description_id:
             data_save['description_id'] = description_id
         if meta_data:
             data_save['meta_data'] = meta_data
-        
-            
+
         if data_save:
             
             r = wcapi.put(f"products/{v_id}", data_save).json()
